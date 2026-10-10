@@ -1,17 +1,18 @@
-# 🛡️ Wazuh 4.14 SOC Lab — Custom Email Integration & Dual-NIC Routing
+# 🛡️ Wazuh 4.14 SOC Lab — Custom Email Integration, Dual-NIC Routing & Windows Detection Use Cases
 
-A hands-on Security Operations Center (SOC) lab built on **Wazuh 4.14 OVA (Amazon Linux 2023)** with a **Windows 11 agent**, featuring a fully working alert-to-email pipeline via Mailtrap — achieved by independently root-causing and solving four engineering failures not covered by standard documentation.
+A hands-on Security Operations Center (SOC) lab built on **Wazuh 4.14 OVA (Amazon Linux 2023)** with a **Windows 11 Enterprise agent**. Features a fully working alert-to-email pipeline via Mailtrap — achieved by independently root-causing four engineering failures not covered by standard documentation — plus end-to-end validated Windows detection use cases.
 
 ---
 
 ## 📌 Project Overview
 
-The goal of this lab was a functional SIEM alerting pipeline. The standard Wazuh email configuration **failed** in this environment for multiple technical reasons. Instead of accepting the defaults, each failure was diagnosed and solved with custom engineering:
+The standard Wazuh email configuration **failed** in this environment for multiple technical reasons. Each failure was diagnosed and solved with custom engineering:
 
 - ✅ Custom Python SMTP integration replacing the unstable native email module
 - ✅ Dual-NIC virtual networking (isolated management + outbound internet)
 - ✅ Static routing fix for asymmetric traffic across two adapters
 - ✅ Manual Base64 `AUTH PLAIN` authentication to bypass OpenSSL 3 legacy-crypto restrictions
+- ✅ Validated detection use cases: account manipulation, account lockout, FIM, CIS benchmarking, vulnerability detection
 
 ---
 
@@ -20,7 +21,7 @@ The goal of this lab was a functional SIEM alerting pipeline. The standard Wazuh
 | Component | Detail |
 |---|---|
 | **SIEM Server** | Wazuh 4.14 OVA (Amazon Linux 2023) on VirtualBox |
-| **Endpoint** | Windows 11 VM with Wazuh agent |
+| **Endpoint** | Windows 11 Enterprise VM ("victim") with Wazuh agent |
 | **Adapter 1** | Host-only — `192.168.75.0/24` (management + agent traffic) |
 | **Adapter 2** | NAT — outbound internet for SMTP delivery |
 | **Alert Delivery** | Mailtrap sandbox inbox via custom integration |
@@ -56,6 +57,19 @@ s.docmd("AUTH", "PLAIN " + c)
 
 ---
 
+## 🔍 Detection Use Cases Validated
+
+| Use case | Trigger on victim | Wazuh rule(s) | Result |
+|---|---|---|---|
+| Account creation / enable | Created & enabled local user `mytest` | 60109 / 60110 (level 8) | Alerts indexed and searchable |
+| Account lockout | Repeated login errors → Event 4740 | 60115 (level 9) | Lockout alert raised |
+| File Integrity Monitoring | Added/modified/deleted `c:\users\public\fimtest` | syscheck | added / modified / deleted events logged |
+| CIS benchmark (SCA) | CIS Windows 11 Enterprise Benchmark v3.0.0 | SCA policy | 482 checks: 123 passed / 350 failed (26%) |
+| Vulnerability detection | Package scan on Windows 11 | CVE-2026-45585 (Medium) | Flagged in Vulnerability Detection |
+| Service startup change | Changed service start type | 61104 (level 3) | Persistence-style change logged |
+
+---
+
 ## 💻 Custom Integration Script
 
 📁 Uploaded in this repo as `custom-email.py` (server path: `/var/ossec/integrations/`)
@@ -81,14 +95,18 @@ Key techniques:
 
 ## 📸 Lab Evidence
 
-| Mailtrap inbox receiving alerts | Wazuh dashboard |
+| Wazuh Overview — agent active, severity counts | Threat Hunting — alerts + MITRE mapping |
 |---|---|
-| ![mailtrap](mailtrap-inbox.png) | ![dashboard](wazuh-dashboard-alerts.png) |
+| ![overview](wazuh-overview.png) | ![dashboard](wazuh-dashboard-alerts.png) |
+
+| Events table — account creation detected | Mailtrap — alert email delivered |
+|---|---|
+| ![events](wazuh-events-table.png) | ![mailtrap](mailtrap-inbox.png) |
 
 ---
 
 ## 🎯 Skills Demonstrated
 
-SIEM deployment • Linux troubleshooting • Network routing • Python scripting • SMTP/TLS authentication • OpenSSL security policy • Technical documentation
+SIEM deployment • Linux troubleshooting • Network routing • Python scripting • SMTP/TLS authentication • OpenSSL security policy • Windows event detection • MITRE ATT&CK mapping • Technical documentation
 
 *Every failure documented. Every fix explained.*
