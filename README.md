@@ -109,4 +109,10 @@ Key techniques:
 
 SIEM deployment • Linux troubleshooting • Network routing • Python scripting • SMTP/TLS authentication • OpenSSL security policy • Windows event detection • MITRE ATT&CK mapping • Technical documentation
 
+---
+
+## 📑 GRC & Compliance Evidence
+
+- [Incident_Report_GRC.pdf](Incident_Report_GRC.pdf) — GRC-formatted incident report for the simulated brute-force attack: ISO/IEC 27001 A.12.4, EU NIS2 Art. 21 & 23, NIST CSF 2.0, MITRE ATT&CK T1110. Cybersecurity as business protection and legal compliance — not just hacker-catching.
+
 *Every failure documented. Every fix explained.*
