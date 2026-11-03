@@ -1,7 +1,8 @@
 # 🛡️ Wazuh 4.14 SOC Lab — Custom Email Integration, Dual-NIC Routing & Windows Detection Use Cases
 
-A hands-on Security Operations Center (SOC) lab built on **Wazuh 4.14 OVA (Amazon Linux 2023)** with a **Windows 11 Enterprise agent**. Features a fully working alert-to-email pipeline via Mailtrap — achieved by independently root-causing four engineering failures not covered by standard documentation — plus end-to-end validated Windows detection use cases.
+ "Objective: Simulate MITRE ATT&CK T1110 (Brute Force) & Persistence attacks on Windows endpoints to validate Wazuh detection rules and generate GRC-compliant incident reports."
 
+A hands-on Security Operations Center (SOC) lab built on **Wazuh 4.14 OVA (Amazon Linux 2023)** with a **Windows 11 Enterprise agent**. Features a fully working alert-to-email pipeline via Mailtrap — achieved by independently root-causing four engineering failures not covered by standard documentation — plus end-to-end validated Windows detection use cases.
 ---
 
 ## 📌 Project Overview
